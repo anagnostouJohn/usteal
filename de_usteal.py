@@ -17,9 +17,6 @@ def cr_encr(key):
     return AES.new(key, mode, IV=IV)
 
 def val_path(path):
-
-    #path = str(Path.home())+"/crypt" 
-    #file_path = str(Path.home())+"/crypt/key.txt" 
     if path == None:
         return
     else:
@@ -53,12 +50,10 @@ def validate_user(password,  key_path):
 def udab(inp,  out,  x):
     if os.path.isfile(inp):
         f_inp = inp.rsplit('/', 1)[1]
-        print(f_inp, "AAAAAAAAAAAAAAAAA")
         counter = 0
         encryptor = cr_encr(x)
         name = f_inp.split("___")[0]
         f_path = out+"/"+name
-        print("XXXXX>>>", f_path)
         if os.path.exists(f_path):            
             f_path = out+f"/{counter}"+name
             counter+=1
@@ -73,7 +68,6 @@ def udab(inp,  out,  x):
         
     elif os.path.isdir(inp):
         counter = 0
-        print(inp)
         for path, dirs, files in os.walk(inp):
             for file in files:
                 fp = os.path.join(path, file)
@@ -120,7 +114,6 @@ if __name__ == "__main__":
     parser.add_argument("-f", "--file",  default=None, help="Give Single File location ")
     parser.add_argument("-o", "--out",  default=None, help="Give Output Results")
     args = parser.parse_args()
-    #print(args)
     if os.getuid() != 0:
         print("You must run the script under root Privileges")
         sys.exit()    
@@ -138,11 +131,9 @@ if __name__ == "__main__":
         time.sleep(1)
         sys.exit()
     elif args.path is None and args.file is not None and args.key is None:
-        print("HI")
         new_key = args.file.rsplit('/', 1)[0]
         args.key = new_key+"/key.txt"
     elif args.path is not None and args.file is None and args.key is None:
-        print (args.path)
         args.key =  args.path+"/key.txt"
     
     
@@ -168,42 +159,5 @@ if __name__ == "__main__":
         print(err)
         
     main(args.out, f_p ,  x)
-#    
-#    print (is_path, is_path1, is_path2)
-    #print (is_path, is_path1)
-    #x = validate_user(passw,  args.key)
-    
-    
-    
-    
-    
-    
-    
-    
-#    if args.key == None:
-#        try:
-#            print(new_key)
-#            is_path = val_path(new_key)
-#            if is_path == True:
-#                
-#                main(args,  x)
-#            else:
-#                print("No Crypto Key")
-#        except Exception as err:
-#            print(err)
-#    elif args.key is not None:
-#        try:
-#            print("XXXXX", args.key)
-#            is_path = val_path(args)
-#
-#            if is_path == True:
-#               
-#                main(args,  x)
-#            else:
-#                print("No Proper Key Path given")                
-#        except Exception as err:
-#            print(err)
-            
-        
             
     

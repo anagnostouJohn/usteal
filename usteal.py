@@ -100,14 +100,7 @@ def val_path():
 def usb_file_passes(args):
     key = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(16))
     return key
-#    else :        
-#        first_pass = getpass.getpass("Insert Password To encrypt USB Files: ")
-#        second_pass = getpass.getpass("Confirm Password : ")
-#        if first_pass == second_pass:
-#            return first_pass
-#        else:
-#            print("Passwords Does Not Match")
-#            usb_file_passes(args)
+
   
 def lock_file_passes():
     first_pass = getpass.getpass("Insert Password To unlock the Key File: ")
@@ -190,7 +183,6 @@ def main(args, x):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='   ')
     parser.add_argument("-k", "--key",  default=None, help="Generate New Pare of Keys", action="store_true")
-    #parser.add_argument("-r", "--rund",  default=None, help="Generate Rundom Encryption Key", action="store_true")
     args = parser.parse_args()
     if os.getuid() != 0:
         print("You must run the script under root Privileges")
