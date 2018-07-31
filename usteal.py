@@ -8,12 +8,12 @@ import argparse
 import datetime
 import hashlib
 import getpass
-from pathlib import Path
-from Crypto.Cipher import AES
 import json
 import pyudev
 import tempfile
 import psutil
+from pathlib import Path
+from Crypto.Cipher import AES
 
 
 dt = datetime.datetime.now()
@@ -42,7 +42,7 @@ def dab(path, key):
         for root,  dirs,  files in os.walk(path):
             try:
                 for name in files:
-                    fp.append(tempfile.NamedTemporaryFile(dir = tmpdirname,  prefix =name+"___" )) # suffix="<something>" h kataliksh
+                    fp.append(tempfile.NamedTemporaryFile(dir = tmpdirname,  prefix =name+"___", delete=False )) # suffix="<something>" h kataliksh
                     x = os.path.join(root, name)
                     file = open(x, "rb")
                     z = file.read()
@@ -64,13 +64,13 @@ def dab(path, key):
                 encr_file.write(ciphertext)
                 encr_file.close()
             except Exception as err:
-                if err.errno == 28:
-                    print ("NO MORE SPACE")
+                print(err)
             try:
                 shutil.copyfile(str(Path.home())+"/crypt/key.txt", nfap+"/key.txt")
             except Exception as err:
-                if err.errno == 28:
-                    print ("NO MORE SPACE")
+                print(err)
+                #if err.errno == 28:
+                #    print ("NO MORE SPACE")
     sys.exit()
         
 
@@ -98,17 +98,16 @@ def val_path():
             return False
 
 def usb_file_passes(args):
-    if args.rund == True:
-        key = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(16))
-        return key
-    else :        
-        first_pass = getpass.getpass("Insert Password To encrypt USB Files: ")
-        second_pass = getpass.getpass("Confirm Password : ")
-        if first_pass == second_pass:
-            return first_pass
-        else:
-            print("Passwords Does Not Match")
-            usb_file_passes(args)
+    key = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(16))
+    return key
+#    else :        
+#        first_pass = getpass.getpass("Insert Password To encrypt USB Files: ")
+#        second_pass = getpass.getpass("Confirm Password : ")
+#        if first_pass == second_pass:
+#            return first_pass
+#        else:
+#            print("Passwords Does Not Match")
+#            usb_file_passes(args)
   
 def lock_file_passes():
     first_pass = getpass.getpass("Insert Password To unlock the Key File: ")
@@ -191,7 +190,7 @@ def main(args, x):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='   ')
     parser.add_argument("-k", "--key",  default=None, help="Generate New Pare of Keys", action="store_true")
-    parser.add_argument("-r", "--rund",  default=None, help="Generate Rundom Encryption Key", action="store_true")
+    #parser.add_argument("-r", "--rund",  default=None, help="Generate Rundom Encryption Key", action="store_true")
     args = parser.parse_args()
     if os.getuid() != 0:
         print("You must run the script under root Privileges")
