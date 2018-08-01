@@ -1,9 +1,11 @@
+#!/usr/bin/env python3
+
 import os
 import sys
 import time
 import shutil
-import secrets
-import string
+#import secrets
+#import string
 import argparse
 import datetime
 import hashlib
@@ -14,6 +16,8 @@ import tempfile
 import psutil
 from pathlib import Path
 from Crypto.Cipher import AES
+
+
 
 
 dt = datetime.datetime.now()
@@ -33,6 +37,7 @@ def calc_size(path):
     
 
 def dab(path, key):
+
     nfap = str(Path.home())+"/crypt/"+str(dt.year)+"_"+str(dt.month)+"_"+str(dt.day)+"_"+str(dt.hour)+"_"+str(dt.minute)+"_"+str(dt.second)
     if not os.path.exists(nfap):
         os.makedirs(nfap) 
@@ -40,17 +45,24 @@ def dab(path, key):
         fp =[]
         c = 0
         for root,  dirs,  files in os.walk(path):
+            
             try:
                 for name in files:
                     fp.append(tempfile.NamedTemporaryFile(dir = tmpdirname,  prefix =name+"___", delete=False )) # suffix="<something>" h kataliksh
                     x = os.path.join(root, name)
+                    print(x)
                     file = open(x, "rb")
                     z = file.read()
                     fp[c].write(z)
                     fp[c].seek(0)
                     c+=1
-            except Exception as err:
-                print ("error", err)
+            except IOError as err:
+                if err.errno is 2 or 5:
+                    print(err)
+                    continue
+                else: 
+                    print(err)
+                    continue
 
         for i in fp:
             try:
@@ -98,7 +110,8 @@ def val_path():
             return False
 
 def usb_file_passes(args):
-    key = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(16))
+    #key = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(16))
+    key = os.urandom(16).hex()
     return key
 
   
@@ -128,7 +141,7 @@ def validate_user(password):
     try:
         plain = encryptor.decrypt(file.read())
         file.close()
-        f_j = json.loads(plain)
+        f_j = json.loads(plain.decode("utf-8"))
         del encryptor
         if f_j["file"] == password:
             return f_j["usb"]
