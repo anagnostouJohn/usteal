@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.6
 
 
 from pathlib import Path
@@ -39,7 +39,7 @@ def validate_user(password,  key_path):
     try:
         plain = encryptor.decrypt(file.read())
         file.close()
-        f_j = json.loads(plain)
+        f_j = json.loads(plain.decode("utf-8"))
         del encryptor
         if f_j["file"] == password:
             return f_j["usb"]
@@ -58,7 +58,7 @@ def udab(inp,  out,  x):
         name = f_inp.split("___")[0]
         f_path = out+"/"+name
         if os.path.exists(f_path):            
-            f_path = out+f"/{counter}"+name
+            f_path = out+str(counter)+name
             counter+=1
         e_file = open(inp,  "rb")
         e_bytes = e_file.read()
@@ -81,7 +81,7 @@ def udab(inp,  out,  x):
                     name = file.split("___")[0]
                     f_path = out+"/"+name
                     if os.path.exists(f_path):
-                        f_path = out+f"/{counter}"+name
+                        f_path = out+str(counter)+name
                         counter+=1
                     e_file = open(fp,  "rb")
                     e_bytes = e_file.read()
@@ -91,7 +91,7 @@ def udab(inp,  out,  x):
                     s_file.write(d_bytes)
                     s_file.close()
                     del encryptor            
-    print(f"All files Decrypted located in {out}") 
+    print("All files Decrypted located in "+str(out)) 
 
             
 def main(out, f_p,  x):
