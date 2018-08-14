@@ -50,7 +50,7 @@ def dab(path, key):
                 for name in files:
                     fp.append(tempfile.NamedTemporaryFile(dir = tmpdirname,  prefix =name+"___", delete=False )) # suffix="<something>" h kataliksh
                     x = os.path.join(root, name)
-                    print(x)
+                    
                     file = open(x, "rb")
                     z = file.read()
                     fp[c].write(z)
